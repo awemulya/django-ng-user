@@ -5,6 +5,7 @@ from . import views
 urlpatterns = patterns('',
                        url(r'^login/$', views.web_login, name='login'),
                        url(r'^logout/$', views.logout, name='logout'),
+                       url(r'^register/$', views.register, name='register'),
                        # url(r'^register/$', RegistrationView.as_view(form_class=UserRegistrationForm,
                        #                                              template_name='registration/registration_form.html')),
                        # url(r'^list$', UserList.as_view(), name='user-list'),

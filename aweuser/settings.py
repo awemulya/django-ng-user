@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'aweuser'
+    'user'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,21 +58,24 @@ ROOT_URLCONF = 'aweuser.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': ['user'],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.static',
+                'django.core.context_processors.request',
             ],
+            'loaders': ['django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader'
+            ]
         },
     },
 ]
 
 WSGI_APPLICATION = 'aweuser.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -90,7 +93,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -104,9 +107,34 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/auth/login/'
-LOGOUT_URL = '/auth/logout/'
+MEDIA_URL = "/media/"
 
-LOGIN_EXEMPT_URLS = (LOGIN_URL)
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+
+LOGIN_URL = '/login/'
+
+LOGOUT_URL = '/logout/'
+
+LOGIN_EXEMPT_URLS = ('register/', LOGIN_URL)
 
 AUTH_USER_MODEL = 'user.AweUser'

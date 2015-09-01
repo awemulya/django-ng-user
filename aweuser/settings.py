@@ -50,6 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'user.middleware.LoginRequiredMiddleware'
 )
 
 ROOT_URLCONF = 'aweuser.urls'
@@ -103,5 +104,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/auth/login/'
+LOGOUT_URL = '/auth/logout/'
+
+LOGIN_EXEMPT_URLS = (LOGIN_URL)
 
 AUTH_USER_MODEL = 'user.AweUser'

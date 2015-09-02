@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.messages import info,error
+from django.contrib.auth.views import login
+from django.contrib.messages import info
 from django.contrib.auth import logout as auth_logout
 from user.forms import UserCreationForm
-from user.models import MyUserManager
 
 
 def index(request):
@@ -17,19 +16,11 @@ def web_login(request, **kwargs):
         return redirect('/', **kwargs)
     else:
         if request.method == 'POST':
-            email = request.POST.get('email', '')
-            password = request.POST.get('password', '')
-            user = authenticate(username=email, password=password)
             if request.POST.get('remember_me', 'off') == 'on':
                 request.session.set_expiry(1209600) # 2 weeks
             else:
                 request.session.set_expiry(0)
-            if user is not None:
-                login(request, user)
-            else:
-                error(request, "Invalid user password.")
-        return render(request, 'registration/login.html')
-
+        return login(request, **kwargs)
 
 
 def logout(request, next_page=None):
@@ -42,10 +33,8 @@ def logout(request, next_page=None):
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        # import pdb
-        # pdb.set_trace()
         if form.is_valid():
-            form.save(commit=True)
+            form.save()
             info(request, "Registration Complete Please Login To Continue.")
             return render(request, 'registration/login.html')
         return render(request, 'registration/register.html', {'form': form})

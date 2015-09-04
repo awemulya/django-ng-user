@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Players
 
 
-def home(request):
+def dashboard(request):
     return render(request, 'home.html')
 
 

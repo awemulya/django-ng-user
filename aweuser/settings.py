@@ -136,7 +136,7 @@ LOGIN_URL = '/login/'
 
 LOGOUT_URL = '/logout/'
 
-LOGIN_REDIRECT_URL = '/dashboard/home/'
+LOGIN_REDIRECT_URL = '/app/dashboard/'
 
 LOGIN_EXEMPT_URLS = ('register/', LOGIN_URL)
 

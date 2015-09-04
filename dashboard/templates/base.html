@@ -1,5 +1,11 @@
 <!DOCTYPE html>
+{% block top %}
 <html>
+{% endblock %}
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +22,11 @@
     <link href="{{ STATIC_URL }}user/vendor/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-      <link href="{{ STATIC_URL }}user/vendor/dist//css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+      <link href="{{ STATIC_URL }}user/vendor/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+      <link href="{{ STATIC_URL }}user/bower_components/angular-bootstrap/ui-bootstrap-csp.css" rel="stylesheet" type="text/css" />
+      <link href="{{ STATIC_URL }}user/awe/app.css" rel="stylesheet" type="text/css" />
+   {% block extrascss %}
+  {% endblock %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -211,7 +221,7 @@
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{% url 'home' %}"><i class="fa fa-circle-o"></i> Home</a></li>
+                <li><a href="{% url 'dashboard' %}"><i class="fa fa-circle-o"></i> Home</a></li>
                 <li><a href="{% url 'players' %}"><i class="fa fa-circle-o"></i> Players</a></li>
               </ul>
             </li>
@@ -359,7 +369,9 @@
                     <span class="label label-success pull-right">95%</span>
                   </h4>
                   <div class="progress progress-xxs">
-                    <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                    <div class="progress-ba.modal {
+display: block;
+}r progress-bar-success" style="width: 95%"></div>
                   </div>
                 </a>
               </li>
@@ -466,5 +478,7 @@
     <script src="{{ STATIC_URL }}user/vendor/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ STATIC_URL }}user/vendor/dist/js/demo.js"></script>
+  {% block extrascripts %}
+  {% endblock %}
   </body>
 </html>

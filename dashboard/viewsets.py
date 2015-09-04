@@ -1,7 +1,7 @@
 __author__ = 'awemulya'
 
-from.models import Players, Game
-from .serializer import PlayerSerializer, GameSerializer
+from.models import Players, Game, Club
+from .serializer import PlayerSerializer, GameSerializer, ClubSerializer
 from rest_framework import viewsets
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -21,6 +21,17 @@ class GameViewSet(viewsets.ModelViewSet):
     """
     queryset = Game.objects.all()
     serializer_class = GameSerializer
+
+    def perform_create(self, serializer):
+            serializer.save()
+
+
+class ClubViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list` and `detail` actions.
+    """
+    queryset = Club.objects.all()
+    serializer_class = ClubSerializer
 
     def perform_create(self, serializer):
             serializer.save()

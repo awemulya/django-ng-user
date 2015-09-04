@@ -20,7 +20,8 @@ from django.conf import settings
 urlpatterns = [
     # url(r'^admin/', include(admin.site.urls)),
     url(r'', include('user.urls')),
-    url(r'^accounts/', include('dashboard.urls')),
+    url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

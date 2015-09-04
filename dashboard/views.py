@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from .models import Players
 
 
-def profile(request):
-    return render(request, 'profile.html')
+def home(request):
+    return render(request, 'home.html')
 
 
 def players(request):
-    return render(request, 'profile.html')
+    objlist = Players.objects.all()
+    return render(request, 'players.html',{'players':objlist})

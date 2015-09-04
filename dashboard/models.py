@@ -38,11 +38,19 @@ class Players(models.Model):
             point += game.points
         return point
 
-class Game(models.Model):
+class Fixture(models.Model):
+    home = models.ForeignKey(Club, related_name="home")
+    away = models.ForeignKey(Club, related_name="away")
     week = models.IntegerField(default=0)
+    home_goals = models.IntegerField(default=0)
+    away_goals = models.IntegerField(default=0)
+    time = models.DateTimeField(null=True)
+
+
+class Game(models.Model):
     points = models.IntegerField(default=0)
     player = models.ForeignKey(Players, related_name='game')
-    fixture = models.CharField(max_length=50, null=True)
+    fixture = models.ForeignKey(Fixture, related_name="fixture")
 
     def __unicode__(self):
         return  u'%s, %s, %s' % (self.player,self.week,self.points)

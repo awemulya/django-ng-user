@@ -14,7 +14,9 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     game = serializers.HyperlinkedRelatedField(many=True, view_name='game-detail', read_only=True)
+    game_point = serializers.IntegerField(source='point', read_only=True)
+    total_points = serializers.IntegerField(source='points', read_only=True)
 
     class Meta:
         model = Players
-        fields = ('url', 'name', 'position','game')
+        fields = ('url', 'name', 'position', 'game', 'club', 'game_point', 'total_points')

@@ -28,10 +28,20 @@
                     <div class="col-sm-4">
                       <div class="description-block">
                         <h5 class="description-header">{{player.total_points}}</h5>
-                        <span class="description-text">Total</span>
+                        <span class="description-text">In ({{player.game.length}}) Games</span>
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                   </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-sm-4"><label>Game Week</label></div>
+                        <div class="col-sm-4"><label>Points</label></div>
+                        <div class="col-sm-4"><label>Fixture</label></div>
+                    </div>
+                    <div class="row" ng-repeat="game_week in player.game">
+                        <div class="col-sm-4">{{game_week.week}}</div>
+                        <div class="col-sm-4">{{game_week.points}}</div>
+                        <div class="col-sm-4">{{game_week.fixture}}</div>
+                    </div>
                 </div>
               </div>
     </div>

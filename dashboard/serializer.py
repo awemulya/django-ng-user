@@ -4,21 +4,33 @@ from rest_framework import serializers
 from .models import Players, Game, Club
 
 
-class ClubSerializer(serializers.HyperlinkedModelSerializer):
+class ClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Club
-        fields = ('url', 'name', 'established')
+        fields = ('id', 'name', 'established')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
 
-class GameSerializer(serializers.HyperlinkedModelSerializer):
+class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
-        fields = ('url', 'week', 'player')
+        fields = ('id', 'week', 'points', 'fixture')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
 
-class PlayerSerializer(serializers.HyperlinkedModelSerializer):
-    game = serializers.HyperlinkedRelatedField(many=True, view_name='game-detail', read_only=True)
+class PlayerSerializer(serializers.ModelSerializer):
+    game = GameSerializer(many=True)
     club = serializers.ReadOnlyField(source="club.name", read_only=True)
     game_point = serializers.IntegerField(source='point', read_only=True)
     total_points = serializers.IntegerField(source='points', read_only=True)
@@ -26,4 +38,13 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Players
-        fields = ('url', 'name', 'position', 'game', 'club', 'game_point', 'total_points', 'player_age')
+        fields = ('id', 'name', 'position', 'game', 'club', 'game_point', 'total_points', 'player_age')
+        depth = 1
+        extra_kwargs = {
+        "id": {
+            "read_only": False,
+            "required": False,
+        },
+        }
+
+

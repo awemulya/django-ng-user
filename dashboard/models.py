@@ -27,7 +27,7 @@ class Players(models.Model):
     def point(self):
         if not self.game.all().count():
             return 0
-        return self.game.all().order_by('week')[0].points
+        return self.game.all().order_by('-id')[0].points
 
     def points(self):
         if not self.game.all().count():

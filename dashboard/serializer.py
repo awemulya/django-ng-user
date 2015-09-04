@@ -20,7 +20,7 @@ class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
-        fields = ('id', 'week', 'points', 'fixture')
+        fields = ('id', 'points', 'fixture')
         extra_kwargs = {
             "id": {
                 "read_only": False,

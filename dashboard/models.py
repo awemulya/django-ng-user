@@ -38,6 +38,7 @@ class Players(models.Model):
             point += game.points
         return point
 
+
 class Fixture(models.Model):
     home = models.ForeignKey(Club, related_name="home")
     away = models.ForeignKey(Club, related_name="away")

@@ -1,7 +1,7 @@
 __author__ = 'awemulya'
 
 from rest_framework import serializers
-from .models import Players, Game, Club
+from .models import Players, Game, Club, Fixture
 
 
 class ClubSerializer(serializers.ModelSerializer):
@@ -16,11 +16,24 @@ class ClubSerializer(serializers.ModelSerializer):
         }
 
 
-class GameSerializer(serializers.ModelSerializer):
+class FixtureSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = Fixture
+        fields = ('id', 'week', 'home', 'away', 'home_score', 'away_score', 'time')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+class GameSerializer(serializers.ModelSerializer):
+    fixture = FixtureSerializer(many=True)
     class Meta:
         model = Game
         fields = ('id', 'points', 'fixture')
+        depth = 1
         extra_kwargs = {
             "id": {
                 "read_only": False,
@@ -39,7 +52,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Players
         fields = ('id', 'name', 'position', 'game', 'club', 'game_point', 'total_points', 'player_age')
-        depth = 1
+        depth = 2
         extra_kwargs = {
         "id": {
             "read_only": False,

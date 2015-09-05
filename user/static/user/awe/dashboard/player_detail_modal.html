@@ -32,7 +32,7 @@
                       </div><!-- /.description-block -->
                     </div><!-- /.col -->
                   </div><!-- /.row -->
-                    <div class="row">
+                    <div class="row" ng-show="player.game.length">
                         <div class="col-sm-4"><label>Game Week</label></div>
                         <div class="col-sm-4"><label>Points</label></div>
                         <div class="col-sm-4"><label>Fixture</label></div>
@@ -40,7 +40,7 @@
                     <div class="row" ng-repeat="game_week in player.game">
                         <div class="col-sm-4">{{game_week.week}}</div>
                         <div class="col-sm-4">{{game_week.points}}</div>
-                        <div class="col-sm-4">{{game_week.fixture}}</div>
+                        <div class="col-sm-4">{{game_week.fixtures}}</div>
                     </div>
                 </div>
               </div>

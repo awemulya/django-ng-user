@@ -46,6 +46,13 @@ class Fixture(models.Model):
     home_goals = models.IntegerField(default=0)
     away_goals = models.IntegerField(default=0)
     time = models.DateTimeField(null=True)
+    played = models.BooleanField(default=False)
+
+    def game_fixture(self):
+        return self.home.name+' vs ' + self.away.name
+
+    def score(self):
+        return str(self.home_goals)+' - ' + str(self.away_goals)
 
 
 class Game(models.Model):

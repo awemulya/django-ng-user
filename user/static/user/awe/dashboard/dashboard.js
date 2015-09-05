@@ -35,9 +35,42 @@ angular.module('myApp.dashboard', ['ngRoute'])
         modalInstance.result.then(function() {
         });
     };
+    self.openPlayerFixtures = function(player) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: djstatic('user/awe/dashboard/fixtures_modal.html'),
+            controller: 'FixtureModalController',
+            windowClass: 'app-modal-window',
+            resolve: {
+                player: function() {
+                    return player;
+                }
+            }
+        });
+        modalInstance.result.then(function() {
+        });
+    };
 }])
 
 .controller('PlayerDetailModalController', function($scope, $modalInstance, player) {
+    var playerModal = $scope;
+    playerModal.player = player;
+
+     self.profileImg = [{
+        src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
+    }];
+
+
+    playerModal.ok = function() {
+        $modalInstance.close();
+    };
+
+    playerModal.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+})
+
+.controller('FixtureModalController', function($scope, $modalInstance, player) {
     var playerModal = $scope;
     playerModal.player = player;
 

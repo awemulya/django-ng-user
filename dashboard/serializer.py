@@ -29,10 +29,12 @@ class FixtureSerializer(serializers.ModelSerializer):
         }
 
 class GameSerializer(serializers.ModelSerializer):
-    fixture = FixtureSerializer(many=True)
+    fixtures = serializers.ReadOnlyField(source='fixture.game_fixture')
+    week_score = serializers.ReadOnlyField(source='fixture.score')
+    week = serializers.ReadOnlyField(source='fixture.week')
     class Meta:
         model = Game
-        fields = ('id', 'points', 'fixture')
+        fields = ('id', 'points', 'fixtures', 'week','week_score')
         depth = 1
         extra_kwargs = {
             "id": {

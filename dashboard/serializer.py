@@ -4,18 +4,6 @@ from rest_framework import serializers
 from .models import Players, Game, Club, Fixture
 
 
-class ClubSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Club
-        fields = ('id', 'name', 'established')
-        extra_kwargs = {
-            "id": {
-                "read_only": False,
-                "required": False,
-            },
-        }
-
-
 class FixtureSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -62,4 +50,15 @@ class PlayerSerializer(serializers.ModelSerializer):
         },
         }
 
+class ClubSerializer(serializers.ModelSerializer):
+    players = PlayerSerializer(many=True)
+    class Meta:
+        model = Club
+        fields = ('id', 'name', 'established', 'players')
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 

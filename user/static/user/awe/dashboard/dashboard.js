@@ -92,22 +92,6 @@ angular.module('myApp.dashboard', ['ngRoute'])
     };
 })
 
-.controller('ClubPlayerModalController', function($scope, $modalInstance, players) {
-    var playerModal = $scope;
-    playerModal.players = players;
-
-     self.profileImg = [{
-        src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
-    }];
-
-    playerModal.ok = function() {
-        $modalInstance.close();
-    };
-
-    playerModal.cancel = function() {
-        $modalInstance.dismiss('cancel');
-    };
-})
 
 
 .controller('ClubController', ['$scope', 'Clubs', '$modal', '$timeout', function($scope, Clubs, $modal, $timeout) {
@@ -132,15 +116,34 @@ angular.module('myApp.dashboard', ['ngRoute'])
         modalInstance.result.then(function() {
         });
     };
-    self.openPlayerFixtures = function(player) {
+    self.openResults = function(game, played) {
         var modalInstance = $modal.open({
             animation: true,
-            templateUrl: djstatic('user/awe/dashboard/fixtures_modal.html'),
-            controller: 'FixtureModalController',
+            templateUrl: djstatic('user/awe/dashboard/club/results_modal.html'),
+            controller: 'ClubResultsModalController',
             windowClass: 'app-modal-window',
             resolve: {
-                player: function() {
-                    return player;
+                game: function() {
+                    return game;
+                },
+                played: function() {
+                    return played;
+                }
+            }
+        });
+        modalInstance.result.then(function() {
+        });
+    };
+
+    self.openEditClub = function(club) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: djstatic('user/awe/dashboard/club/club_modify_modal.html'),
+            controller: 'ClubModalController',
+            windowClass: 'app-modal-window',
+            resolve: {
+                club: function() {
+                    return club;
                 }
             }
         });
@@ -148,3 +151,46 @@ angular.module('myApp.dashboard', ['ngRoute'])
         });
     };
 }])
+
+.controller('ClubPlayerModalController', function($scope, $modalInstance, players) {
+    var playerModal = $scope;
+    playerModal.players = players;
+
+     self.profileImg = [{
+        src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
+    }];
+
+    playerModal.ok = function() {
+        $modalInstance.close();
+    };
+
+    playerModal.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+})
+
+.controller('ClubResultsModalController', function($scope, $modalInstance, game, played) {
+    var playerModal = $scope;
+    playerModal.game = game;
+    playerModal.played = played;
+    playerModal.ok = function() {
+        $modalInstance.close();
+    };
+
+    playerModal.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+})
+
+.controller('ClubModalController', function($scope, $modalInstance, club) {
+    var playerModal = $scope;
+    playerModal.club = angular.copy(club);
+
+    playerModal.ok = function() {
+        $modalInstance.close(playerModal.club);
+    };
+
+    playerModal.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+})

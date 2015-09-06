@@ -12,9 +12,9 @@
         <td>{{club.established}}</td>
         <td><a href="" title="Players" ng-click="openPlayers(club.players)"><i class="fa fa-user"></i></a></td>
         <td><a href="" title="Add Players" ng-click="openAddPlayers()"><i class="fa fa-user-plus"></i></a></td>
-        <td><a href="" title="view Results" ng-click="openResults()"><i class="fa fa-support"></i></a></td>
-        <td><a href="" title="View Fixtures" ng-click="openFixtures()"><i class="fa fa-calendar"></i></a></td>
-        <td><a href="" title="Edit Club" ng-click="openEditClub()"><i class="fa fa-edit"></i></a></td>
+        <td><a href="" title="view Results" ng-click="openResults(club.game, true)"><i class="fa fa-support"></i></a></td>
+        <td><a href="" title="View Fixtures" ng-click="openResults(club.game, false)"><i class="fa fa-calendar"></i></a></td>
+        <td><a href="" title="Edit Club" ng-click="openEditClub(club)"><i class="fa fa-edit"></i></a></td>
       </tr>
     </tbody>
     <tfoot>

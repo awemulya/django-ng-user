@@ -1,20 +1,10 @@
+from rest_framework.fields import SerializerMethodField
+
 __author__ = 'awemulya'
 
 from rest_framework import serializers
 from .models import Players, Game, Club, Fixture
 
-
-class FixtureSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Fixture
-        fields = ('id', 'week', 'home', 'away', 'home_score', 'away_score', 'time')
-        extra_kwargs = {
-            "id": {
-                "read_only": False,
-                "required": False,
-            },
-        }
 
 class GameSerializer(serializers.ModelSerializer):
     fixtures = serializers.ReadOnlyField(source='fixture.game_fixture')
@@ -50,15 +40,39 @@ class PlayerSerializer(serializers.ModelSerializer):
         },
         }
 
-class ClubSerializer(serializers.ModelSerializer):
-    players = PlayerSerializer(many=True)
+
+class FixtureSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Club
-        fields = ('id', 'name', 'established', 'players')
+        model = Fixture
+        fields = ('id', 'week', 'home', 'away', 'home_goals', 'away_goals', 'time','played')
+        depth = 1
         extra_kwargs = {
             "id": {
                 "read_only": False,
                 "required": False,
             },
         }
+
+
+class ClubSerializer(serializers.ModelSerializer):
+    players = PlayerSerializer(many=True)
+    game = SerializerMethodField('get_games')
+
+    class Meta:
+        model = Club
+        fields = ('id', 'name', 'established', 'players', 'game')
+        depth = 3
+
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
+
+    def get_games(self, club):
+        from django.db.models import Q
+        fixtures = Fixture.objects.filter(Q(home=club) | Q(away=club))
+        serializer = FixtureSerializer(instance=fixtures, many=True)
+        return serializer.data
 

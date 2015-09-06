@@ -20,7 +20,7 @@ class FixtureViewSet(viewsets.ModelViewSet):
     This viewset automatically provides `list` and `detail` actions.
     """
     queryset = Fixture.objects.all()
-    serializer_class = GameSerializer
+    serializer_class = FixtureSerializer
 
     def perform_create(self, serializer):
             serializer.save()

@@ -19,7 +19,8 @@ angular.module('myApp', [
             element.datepicker({
                 dateFormat: 'yy-mm-dd',
                 onSelect: function (date) {
-                    scope.date = date;
+//                element.val(date);
+                    scope.club.established = date;
                     scope.$apply();
                 }
             });

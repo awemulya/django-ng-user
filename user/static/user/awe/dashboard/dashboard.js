@@ -147,7 +147,25 @@ angular.module('myApp.dashboard', ['ngRoute'])
                 }
             }
         });
-        modalInstance.result.then(function() {
+
+        modalInstance.result.then(function(clubData) {
+        var clubService = new Clubs();
+        clubService.name = clubData.name;
+        clubService.established = clubData.established;
+         clubService.$update({clubId:clubData.id},
+            function(data) {
+            for (var i=0; i<self.clubs.length; i++){
+                if(self.clubs[i].id == data.id){
+                    self.clubs[i] = data;
+                    break;
+                }
+            }
+            },
+            function(error) {
+                console.log(error);
+            });
+
+
         });
     };
 }])

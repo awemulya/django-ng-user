@@ -7,8 +7,9 @@ angular.module('dashboardServices', ['ngResource'])
 }])
 
 .factory('Clubs', ['$resource', function($resource){
-	return $resource('/app/clubs/', {}, {
-	  query: {method:'GET', params:{}, isArray:true}
+	return $resource('/app/clubs/:clubId', {}, {
+	  query: {method:'GET', params:{clubId: ''}, isArray:true},
+	  update: {method:'PUT', params: {clubId: '@clubId'}},
 	});
 }])
 

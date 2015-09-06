@@ -13,7 +13,7 @@ def index(request):
 
 def web_login(request, **kwargs):
     if request.user.is_authenticated():
-        return redirect('/dashboard/home/', **kwargs)
+        return redirect('/app/dashboard/', **kwargs)
     else:
         if request.method == 'POST':
             if request.POST.get('remember_me', 'off') == 'on':

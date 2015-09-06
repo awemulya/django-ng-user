@@ -55,8 +55,8 @@ class FixtureSerializer(serializers.ModelSerializer):
 
 
 class ClubSerializer(serializers.ModelSerializer):
-    players = PlayerSerializer(many=True)
-    game = SerializerMethodField('get_games')
+    players = PlayerSerializer(many=True, read_only=True)
+    game = SerializerMethodField('get_games', read_only= True)
 
     class Meta:
         model = Club

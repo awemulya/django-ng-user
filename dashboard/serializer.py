@@ -23,15 +23,16 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    game = GameSerializer(many=True)
-    club = serializers.ReadOnlyField(source="club.name", read_only=True)
+    game = GameSerializer(many=True, read_only=True)
+    club_name = serializers.ReadOnlyField(source="club.name", read_only=True)
+    club = serializers.PrimaryKeyRelatedField(queryset=Club.objects.all())
     game_point = serializers.IntegerField(source='point', read_only=True)
     total_points = serializers.IntegerField(source='points', read_only=True)
     player_age = serializers.IntegerField(source='age', read_only=True)
 
     class Meta:
         model = Players
-        fields = ('id', 'name', 'position', 'game', 'club', 'game_point', 'total_points', 'player_age')
+        fields = ('id', 'name', 'position', 'date_of_birth', 'game', 'club', 'club_name', 'game_point', 'total_points', 'player_age')
         depth = 2
         extra_kwargs = {
         "id": {
@@ -42,9 +43,14 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 
 class FixtureSerializer(serializers.ModelSerializer):
+    home = serializers.PrimaryKeyRelatedField(queryset=Club.objects.all())
+    away = serializers.PrimaryKeyRelatedField(queryset=Club.objects.all())
+    game_fixture_text = serializers.CharField(source='game_fixture', read_only=True)
+    score_text = serializers.CharField(source='score', read_only=True)
     class Meta:
         model = Fixture
-        fields = ('id', 'week', 'home', 'away', 'home_goals', 'away_goals', 'time','played')
+        fields = ('id', 'week', 'home', 'away', 'home_goals', 'away_goals', 'time','played',
+                  'score_text', 'game_fixture_text')
         depth = 1
         extra_kwargs = {
             "id": {

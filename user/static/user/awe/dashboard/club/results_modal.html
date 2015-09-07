@@ -11,7 +11,7 @@
                     <div class="row" ng-repeat="game_week in game">
                         <div class="col-sm-4" ng-show="played">{{game_week.week}}</div>
                         <div class="col-sm-4" ng-show="played">{{game_week.home_goals}}-{{game_week.away_goals}}</div>
-                        <div class="col-sm-4" ng-show="played">{{game_week.home.name}}Vs {{game_week.away.name}}</div>
+                        <div class="col-sm-4" ng-show="played">{{game_week.game_fixture_text}}</div>
                     </div>
                 </div>
               </div>

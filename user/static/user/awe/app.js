@@ -8,6 +8,9 @@ angular.module('myApp', [
   'dashboardServices',
   'myApp.dashboard',
 ])
+.config(function($resourceProvider) {
+  $resourceProvider.defaults.stripTrailingSlashes = false;
+})
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/dashboard'});
 }])

@@ -63,10 +63,11 @@ class FixtureSerializer(serializers.ModelSerializer):
 class ClubSerializer(serializers.ModelSerializer):
     players = PlayerSerializer(many=True, read_only=True)
     game = SerializerMethodField('get_games', read_only= True)
+    points = serializers.ReadOnlyField(source="league_points")
 
     class Meta:
         model = Club
-        fields = ('id', 'name', 'established', 'players', 'game')
+        fields = ('id', 'name', 'established', 'players', 'game', 'points')
         depth = 3
 
         extra_kwargs = {

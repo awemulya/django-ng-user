@@ -3,13 +3,15 @@
       <tr>
         <th>Club <a href="" title="Add Club" ng-click="openAddClub()"><i class="fa fa-plus"></i></a></th>
         <th>Established</th>
+        <th>Points</th>
         <th colspan="6">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="club in clubs">
+      <tr ng-repeat="club in clubs | orderBy:'-points'">
         <td>{{club.name}}</td>
         <td>{{club.established}}</td>
+        <td>{{club.points}}</td>
         <td><a href="" title="Players" ng-click="openPlayers(club.players)"><i class="fa fa-user"></i></a></td>
         <td><a href="" title="Add Players" ng-click="openAddPlayers(club)"><i class="fa fa-user-plus"></i></a></td>
         <td><a href="" title="view Results" ng-click="openResults(club.game, true)"><i class="fa fa-support"></i></a></td>

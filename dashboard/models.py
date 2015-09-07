@@ -1,10 +1,27 @@
 import datetime
 from django.db import models
+from django.db.models import Q
 
 
 class Club(models.Model):
     name = models.CharField(max_length=30, default='Manchester City')
     established = models.DateField(null=True)
+
+    def league_points(self):
+        fixtures = Fixture.objects.filter(Q(home=self) | Q(away=self) & Q(played=True))
+        points = 0;
+        for fix in fixtures:
+            if fix.home == self:
+                if fix.home_goals == fix.away_goals:
+                    points += 1
+                elif fix.home_goals > fix.away_goals:
+                    points += 3
+            else:
+                if fix.home_goals == fix.away_goals:
+                    points +=1
+                elif fix.away_goals > fix.home_goals:
+                    points += 3
+        return points
 
 class Players(models.Model):
     POSITION_CHOICES = (

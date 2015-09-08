@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       <tr ng-repeat="player in players | orderBy:'-total_points'">
-        <td>{{player.name}}</td>
+        <td><a href="#/players/{{player.id}}"> {{player.name}} </a></td>
         <td>{{player.player_age}}</td>
         <td>{{player.club_name}}</td>
         <td>{{player.game_point}}</td>

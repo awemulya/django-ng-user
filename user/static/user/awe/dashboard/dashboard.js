@@ -11,9 +11,39 @@ angular.module('myApp.dashboard', ['ngRoute'])
     templateUrl: djstatic('user/awe/dashboard/index.html'),
     controller: 'DashboardController'
   })
+
   $routeProvider.when('/players', {
     templateUrl: djstatic('user/awe/dashboard/player/players.html'),
     controller: 'PlayerController'
+  })
+
+  $routeProvider.when('/players/:pid', {
+    templateUrl: djstatic('user/awe/dashboard/player/player_details.html'),
+    controller: 'PlayerDetailController',
+    resolve: {
+      // I will cause a 1 second delay
+      delay: function($q, $timeout) {
+        var delay = $q.defer();
+        $timeout(delay.resolve, 1000);
+        return delay.promise;
+      }
+    }
+  })
+  $routeProvider.when('/fixtures', {
+    templateUrl: djstatic('user/awe/dashboard/fixture/fixtures.html'),
+    controller: 'FixtureController'
+  })
+  $routeProvider.when('/fixtures/:fid', {
+    templateUrl: djstatic('user/awe/dashboard/fixture/fixture_detail.html'),
+    controller: 'FixtureDetailController',
+    resolve: {
+      // I will cause a 1 second delay
+      delay: function($q, $timeout) {
+        var delay = $q.defer();
+        $timeout(delay.resolve, 1000);
+        return delay.promise;
+      }
+    }
   })
   $routeProvider.when('/clubs', {
     templateUrl: djstatic('user/awe/dashboard/club/club.html'),
@@ -97,6 +127,48 @@ angular.module('myApp.dashboard', ['ngRoute'])
 })
 
 
+
+.controller('PlayerDetailController', ['$scope', 'Clubs', 'Player', 'Fixture', '$modal', '$timeout', '$routeParams',
+function($scope, Clubs, Player, Fixture, $modal, $timeout, $routeParams) {
+
+var self = $scope;
+self.pid =  $routeParams.pid;
+self.player = {};
+var playerService = new Player();
+    playerService.$get({pId:self.pid},
+            function(data) {
+            self.player = data;
+            },
+            function(error) {
+                console.log(error);
+            });
+
+}])
+
+.controller('FixtureController', ['$scope', 'Clubs', 'Player', 'Fixture', '$modal', '$timeout', '$routeParams',
+function($scope, Clubs, Player, Fixture, $modal, $timeout, $routeParams) {
+
+var self = $scope;
+ self.fixtures = Fixture.query();
+
+}])
+
+.controller('FixtureDetailController', ['$scope', 'Clubs', 'Player', 'Fixture', '$modal', '$timeout', '$routeParams',
+function($scope, Clubs, Player, Fixture, $modal, $timeout, $routeParams) {
+
+var self = $scope;
+self.fid =  $routeParams.fid;
+self.fixture = {};
+var playerService = new Fixture();
+    playerService.$fixture({pId:self.fid},
+            function(data) {
+            self.fixture = data;
+            },
+            function(error) {
+                console.log(error);
+            });
+
+}])
 
 .controller('ClubController', ['$scope', 'Clubs', 'Player', 'Fixture', '$modal', '$timeout',
 function($scope, Clubs, Player, Fixture, $modal, $timeout) {
@@ -299,7 +371,18 @@ self.openAddResults = function(club, clubs) {
     var playerModal = $scope;
     playerModal.players = players;
 
-     self.profileImg = [{
+     self.profileImg.when('/Book/:bookId', {
+    templateUrl: 'book.html',
+    controller: 'BookController',
+    resolve: {
+      // I will cause a 1 second delay
+      delay: function($q, $timeout) {
+        var delay = $q.defer();
+        $timeout(delay.resolve, 1000);
+        return delay.promise;
+      }
+    }
+  }) = [{
         src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
     }];
 

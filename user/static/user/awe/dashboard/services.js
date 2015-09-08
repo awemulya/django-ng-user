@@ -20,6 +20,7 @@ angular.module('dashboardServices', ['ngResource'])
 	return $resource('/app/players/:pId', {}, {
 	  query: {method:'GET', params:{pId: ''}, isArray:true},
 	  update: {method:'PUT', params: {pId: '@pId'}},
+	  player: {method:'GET', params: {pId: '@pId'}},
 	  save: {method:'POST', params: {pId: ''}},
 	});
 }])
@@ -28,6 +29,7 @@ angular.module('dashboardServices', ['ngResource'])
 	return $resource('/app/fixtures/:pId', {}, {
 	  query: {method:'GET', params:{pId: ''}, isArray:true},
 	  update: {method:'PUT', params: {pId: '@pId'}},
+	  fixture: {method:'GET', params: {pId: '@pId'}},
 	  save: {method:'POST', params: {pId: ''}},
 	});
 }])

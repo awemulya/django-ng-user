@@ -11,15 +11,19 @@ angular.module('myApp.dashboard', ['ngRoute'])
     templateUrl: djstatic('user/awe/dashboard/index.html'),
     controller: 'DashboardController'
   })
+  $routeProvider.when('/players', {
+    templateUrl: djstatic('user/awe/dashboard/player/players.html'),
+    controller: 'PlayerController'
+  })
   $routeProvider.when('/clubs', {
     templateUrl: djstatic('user/awe/dashboard/club/club.html'),
     controller: 'ClubController'
   });
 }])
 
-.controller('DashboardController', ['$scope', 'Players', '$modal', '$timeout', function($scope, Players, $modal, $timeout) {
+.controller('DashboardController', ['$scope', 'Player', '$modal', '$timeout', function($scope, Player, $modal, $timeout) {
  var self = $scope;
- self.players = Players.query();
+ self.players = Player.query();
  self.profileImg = [{
         src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
     }];
@@ -60,7 +64,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
     var playerModal = $scope;
     playerModal.player = player;
 
-     self.profileImg = [{
+     playerModal.profileImg = [{
         src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
     }];
 
@@ -78,7 +82,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
     var playerModal = $scope;
     playerModal.player = player;
 
-     self.profileImg = [{
+     playerModal.profileImg = [{
         src: djstatic('user/vendor/dist/img/user2-160x160.jpg'),
     }];
 
@@ -210,7 +214,13 @@ self.openAddPlayers = function(club) {
             resolve: {
             club: function() {
                     return club;
-                }
+                },
+            clubService: function() {
+                    return "";
+                },
+            player: function() {
+                return false;
+            }
 
             }
         });
@@ -342,13 +352,33 @@ self.openAddResults = function(club, clubs) {
 })
 
 
-.controller('PlayerAddModalController', function($scope, $modalInstance, club) {
+.controller('PlayerAddModalController', function($scope, $modalInstance, club, clubService, player) {
     var playerModal = $scope;
     playerModal.options = ['goalkeeper', 'defender', 'midfielder', 'forward'];
-    playerModal.club = angular.copy(club);
     playerModal.player = {};
-    playerModal.player.club_id = club.id;
-    playerModal.player.date_of_birth =  playerModal.club.established;
+    if(player){
+        playerModal.player = player;
+    }
+    playerModal.playerSenario = false;
+    if (!club){
+        playerModal.clubs = clubService.query();
+        playerModal.playerSenario = true;
+        playerModal.club = {};
+        for (var i=0; i< playerModal.clubs; i++){
+            if(playerModal.clubs[i].id == player.club){
+                playerModal.club = playerModal.clubs[i];
+                i= playerModal.clubs.length;
+            }
+        }
+        console.log(playerModal.club);
+        if(!playerModal.club.established){
+            playerModal.club.established = "1990-01-01";
+        }
+    }else{
+        playerModal.club = angular.copy(club);
+        playerModal.player.club_id = club.id;
+        playerModal.player.date_of_birth =  playerModal.club.established;
+    }
     playerModal.ok = function() {
         playerModal.player.date_of_birth =  playerModal.club.established;
         $modalInstance.close(playerModal.player);
@@ -405,3 +435,88 @@ self.openAddResults = function(club, clubs) {
         $modalInstance.dismiss('cancel');
     };
 })
+
+.controller('PlayerController', ['$scope', 'Clubs', 'Player', 'Fixture', 'Game', '$modal', '$timeout',
+function($scope, Clubs, Player, Fixture, Game, $modal, $timeout){
+    var self = $scope
+    self.players = Player.query();
+
+    self.openAddPlayers = function() {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: djstatic('user/awe/dashboard/club/add_players_modal.html'),
+            controller: 'PlayerAddModalController',
+            windowClass: 'app-modal-window',
+            resolve: {
+            club: function() {
+                return false;
+                },
+            clubService: function() {
+                return Clubs;
+            },
+            player: function() {
+                return false;
+            }
+
+            }
+        });
+
+        modalInstance.result.then(function(playerData) {
+        if (!angular.equals({},playerData)){
+        var playerService = new Player();
+            playerService.name = playerData.name;
+            playerService.position = playerData.position;
+            playerService.club = playerData.club.id;
+            playerService.date_of_birth = playerData.date_of_birth;
+            playerService.$save(null,
+            function(data) {
+                self.players.splice(0, 0, data);
+            },
+            function(error) {
+                console.log(error);
+            });
+
+            }
+        });
+    };
+
+    self.openEditPlayer = function(player) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: djstatic('user/awe/dashboard/club/add_players_modal.html'),
+            controller: 'PlayerAddModalController',
+            windowClass: 'app-modal-window',
+            resolve: {
+            club: function() {
+                return false;
+                },
+            clubService: function() {
+                return Clubs;
+            },
+            player: function() {
+                return player;
+            }
+
+            }
+        });
+
+        modalInstance.result.then(function(playerData) {
+        if (!angular.equals({},playerData)){
+        var playerService = new Player();
+            playerService.name = playerData.name;
+            playerService.position = playerData.position;
+            playerService.club = playerData.club.id;
+            playerService.date_of_birth = playerData.date_of_birth;
+            playerService.$save(null,
+            function(data) {
+                self.players.splice(0, 0, data);
+            },
+            function(error) {
+                console.log(error);
+            });
+
+            }
+        });
+    };
+
+}])

@@ -1,8 +1,10 @@
 angular.module('dashboardServices', ['ngResource'])
 
-.factory('Players', ['$resource', function($resource){
-	return $resource('/app/players/', {}, {
-	  query: {method:'GET', params:{}, isArray:true}
+.factory('Game', ['$resource', function($resource){
+	return $resource('/app/games/', {}, {
+	  query: {method:'GET', params:{}, isArray:true},
+	  update: {method:'PUT', params: {gameId: '@gameId'}},
+	  save: {method:'POST', params: {gameId: ''}},
 	});
 }])
 

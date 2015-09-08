@@ -249,6 +249,7 @@ self.openAddPlayers = function(club) {
         });
     };
 
+
 self.openAddResults = function(club, clubs) {
         var modalInstance = $modal.open({
             animation: true,
@@ -352,33 +353,51 @@ self.openAddResults = function(club, clubs) {
 })
 
 
-.controller('PlayerAddModalController', function($scope, $modalInstance, club, clubService, player) {
+.controller('PlayerAddModalController', function($scope, $modalInstance, club, clubService) {
     var playerModal = $scope;
     playerModal.options = ['goalkeeper', 'defender', 'midfielder', 'forward'];
+    playerModal.$watch('clubs', function(clubs) {
+    playerModal.player.club = playerModal.clubs[0];
+}, true);
     playerModal.player = {};
-    if(player){
-        playerModal.player = player;
-    }
     playerModal.playerSenario = false;
     if (!club){
         playerModal.clubs = clubService.query();
         playerModal.playerSenario = true;
         playerModal.club = {};
-        for (var i=0; i< playerModal.clubs; i++){
-            if(playerModal.clubs[i].id == player.club){
-                playerModal.club = playerModal.clubs[i];
-                i= playerModal.clubs.length;
-            }
-        }
-        console.log(playerModal.club);
-        if(!playerModal.club.established){
-            playerModal.club.established = "1990-01-01";
-        }
+        playerModal.club.established = "1990-01-01";
     }else{
         playerModal.club = angular.copy(club);
         playerModal.player.club_id = club.id;
         playerModal.player.date_of_birth =  playerModal.club.established;
     }
+    playerModal.ok = function() {
+        playerModal.player.date_of_birth =  playerModal.club.established;
+        $modalInstance.close(playerModal.player);
+    };
+
+    playerModal.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+})
+
+.controller('PlayerUpdateModalController', function($scope, $modalInstance, player, clubService) {
+    var playerModal = $scope;
+    playerModal.options = ['goalkeeper', 'defender', 'midfielder', 'forward'];
+    playerModal.$watch('clubs', function(clubs) {
+    for(var i=0; i< clubs.length; i++){
+        console.log(playerModal.player.club);
+        if(clubs[i].id == playerModal.player.club){
+            playerModal.player.club = clubs[i];
+            i = clubs.length;
+        }
+    }
+}, true);
+    playerModal.player = player;
+    playerModal.club = {};
+    playerModal.club.established = "1990-01-01";
+    playerModal.playerSenario = true;
+    playerModal.clubs = clubService.query();
     playerModal.ok = function() {
         playerModal.player.date_of_birth =  playerModal.club.established;
         $modalInstance.close(playerModal.player);
@@ -484,7 +503,7 @@ function($scope, Clubs, Player, Fixture, Game, $modal, $timeout){
         var modalInstance = $modal.open({
             animation: true,
             templateUrl: djstatic('user/awe/dashboard/club/add_players_modal.html'),
-            controller: 'PlayerAddModalController',
+            controller: 'PlayerUpdateModalController',
             windowClass: 'app-modal-window',
             resolve: {
             club: function() {
@@ -507,9 +526,13 @@ function($scope, Clubs, Player, Fixture, Game, $modal, $timeout){
             playerService.position = playerData.position;
             playerService.club = playerData.club.id;
             playerService.date_of_birth = playerData.date_of_birth;
-            playerService.$save(null,
+            playerService.$update({pId:playerData.id},
             function(data) {
-                self.players.splice(0, 0, data);
+                for (var i=0; i<self.players.length; i++){
+                    if(self.players[i].id == data.id){
+                        self.players[i] = data;
+                    }
+                }
             },
             function(error) {
                 console.log(error);

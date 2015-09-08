@@ -21,14 +21,14 @@
                         <div class="form-group">
                           <label class="control-label" for="position">
                               <i class="fa fa-times-circle-o"></i> Position</label>
-                            <select class="form-control" id="position" ng-init="player.position = options[0]" ng-model="player.position" ng-options="option for option in options"></select>
+                            <select class="form-control" id="position" ng-init="player.position = player.position || options[0]" ng-model="player.position" ng-options="option for option in options"></select>
 
                         </div>
                         <div class="form-group" ng-show="playerSenario">
                           <label class="control-label" for="club">
                               <i class="fa fa-times-circle-o"></i> Club</label>
                             <select class="form-control" required id="club" name="club" ng-model="player.club"
-                                    ng-init="player.club = clubs[0]"
+                                    ng-init="player.club = player.club ||clubs[0]"
                                     ng-model="player.club" ng-options="option as option.name for option in clubs track by option.id"></select>
                         </div>
                         <div class="form-group">

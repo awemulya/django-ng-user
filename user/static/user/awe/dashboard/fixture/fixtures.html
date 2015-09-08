@@ -6,7 +6,7 @@
         <th>Played</th>
         <th>Fixture</th>
         <th>Game Score</th>
-        <th colspan="3">Actions</th>
+        <th>Edit</th>
       </tr>
     </thead>
     <tbody>
@@ -16,9 +16,7 @@
         <td><div ng-if="fixture.played">Played</div></td>
         <td><a href="#/fixtures/{{fixture.id}}"> {{fixture.game_fixture_text}}</a></td>
         <td>{{fixture.score_text}}</td>
-        <td><a href="" title="view Results" ng-click="openResults(player, true)"><i class="fa fa-support"></i></a></td>
-        <td><a href="" title="View Fixtures" ng-click="openFixtures(player.club, false)"><i class="fa fa-calendar"></i></a></td>
-        <td><a href="" title="Edit Player" ng-click="openEditPlayer(player)"><i class="fa fa-edit"></i></a></td>
+        <td><a href="" title="Edit Player" ng-click="openEditFixture(fixture)"><i class="fa fa-edit"></i></a></td>
       </tr>
     </tbody>
     <tfoot>
@@ -29,7 +27,7 @@
         <th>Points</th>
         <th>Fixture</th>
         <th>Game Score</th>
-        <th colspan="3">Actions</th>
+        <th>Edit</th>
       </tr>
     </tfoot>
 </table>

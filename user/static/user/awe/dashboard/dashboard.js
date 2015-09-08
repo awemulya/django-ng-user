@@ -151,6 +151,50 @@ function($scope, Clubs, Player, Fixture, $modal, $timeout, $routeParams) {
 var self = $scope;
  self.fixtures = Fixture.query();
 
+ self.openEditFixture = function(fixture) {
+        var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: djstatic('user/awe/dashboard/fixture/add_fixture_modal.html'),
+            controller: 'EditFixtureModalController',
+            windowClass: 'app-modal-window',
+            resolve: {
+            fixture: function() {
+                    return fixture;
+                },
+            clubs: function() {
+                    return Clubs;
+                }
+
+            }
+        });
+
+        modalInstance.result.then(function(fixture) {
+        if (!angular.equals({},fixture)){
+        var fixtureService = new Fixture();
+            fixtureService.week = fixture.week;
+            fixtureService.home = fixture.home;
+            fixtureService.away = fixture.away;
+            fixtureService.home_goals = fixture.home_goals;
+            fixtureService.away_goals = fixture.away_goals;
+            var t = fixture.time.split("-");
+            fixtureService.time = new Date(t[0],t[1],t[2]);
+            fixtureService.played = fixture.played;
+            fixtureService.$update({pId: fixture.id},
+            function(data) {
+                    for (var i=0; i<self.fixtures.length; i++){
+                if(self.fixtures[i].id == fixture.id){
+                    self.fixtures[i] = data;
+                    break;
+                }
+            }
+            },
+            function(error) {
+                console.log(error);
+            });
+
+            }
+        });
+    };
 }])
 
 .controller('FixtureDetailController', ['$scope', 'Clubs', 'Player', 'Fixture', '$modal', '$timeout', '$routeParams',
@@ -626,3 +670,58 @@ function($scope, Clubs, Player, Fixture, Game, $modal, $timeout){
     };
 
 }])
+
+.controller('EditFixtureModalController', function($scope, $modalInstance, fixture, Clubs) {
+    var playerModal = $scope;
+    playerModal.club = {};
+    playerModal.$watch('clubs', function(clubs) {
+    playerModal.fixture = fixture;
+    playerModal.club.established = playerModal.fixture.time;
+    for(var i=0; i< clubs.length; i++){
+        if(clubs[i].id == playerModal.fixture.home){
+            playerModal.fixture.home = clubs[i];
+        }else if(clubs[i].id == playerModal.fixture.away){
+            playerModal.fixture.away = clubs[i];
+        }
+    }
+}, true);
+    playerModal.validateMsg = "";
+    playerModal.clubs = Clubs.query();
+    playerModal.ok = function() {
+        if(angular.isObject(playerModal.fixture.home)){
+         playerModal.fixture.home = playerModal.fixture.home.id;
+        }
+        if(angular.isObject(playerModal.fixture.away)){
+         playerModal.fixture.away = playerModal.fixture.away.id;
+        }
+        playerModal.fixture.time =  playerModal.club.established;
+        $modalInstance.close(playerModal.fixture);
+    };
+
+    playerModal.sameClub = function(){
+        var home= "";
+        var away= "";
+        if(angular.isObject(playerModal.fixture.home)){
+             home = playerModal.fixture.home.id;
+        }else{
+            home = playerModal.fixture.home;
+        }
+        if(angular.isObject(playerModal.fixture.away)){
+         away = playerModal.fixture.away.id;
+        }else{
+         away = playerModal.fixture.away;
+        }
+        if(angular.equals(playerModal.fixture.home, playerModal.fixture.away)){
+        playerModal.validateMsg = "Same Club in Home and Away.";
+        return true;
+
+        }
+        playerModal.validateMsg =false;
+        return false;
+
+    };
+
+    playerModal.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+})
